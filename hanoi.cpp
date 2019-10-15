@@ -1,6 +1,6 @@
 /*
- * lang c / c++
- * 1853426
+ * lang can be compiled c / c++ by gcc / g++
+ * 1853426da
  * filename hanoi.cpp
  * hanoi
  */
