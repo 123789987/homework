@@ -47,7 +47,7 @@ void move(int n, stackHanoi *x, stackHanoi *y, stackHanoi *z) {
     pushStack(z, tmp);
     printf("%c->%c\n", x->ch, z->ch);
   } else {
-    move(n-1, x, z, y);
+    move(n - 1, x, z, y);
     popStack(x, &tmp);
     pushStack(z, tmp);
     printf("%c->%c\n", x->ch, y->ch);
@@ -66,9 +66,9 @@ void hanoiStack(int n) {
   initStack(&b, n);
   initStack(&c, n);
   for (int i = n; i > 0; i--) {
-    pushStack(&a,i);
+    pushStack(&a, i);
   }
-  move(n,&a,&b,&c);
+  move(n, &a, &b, &c);
   clearStack(&a);
   clearStack(&b);
   clearStack(&c);
