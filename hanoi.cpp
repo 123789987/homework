@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
   printf("by recursion:\nthe step:\n");
   hanoiRecursion(n);
 
-  printf("Press any key to continue...");
+  printf("Press enter to continue...");
   fflush(stdin);
   getchar();
 
