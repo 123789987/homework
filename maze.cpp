@@ -16,7 +16,6 @@ typedef struct {
   int col;
 } pointType;
 typedef struct {
-  int id;
   pointType p;
   int dir;
 } pathStackType;
@@ -83,9 +82,7 @@ void initMaze(mazeType * maze, pathStackType ** pathStack, bool ifInput) {
           printf("Input out of range, re-enter\n");
           goto mazeStartColInsertWrong;
         }
-        if ((*maze).map[(*maze).start.row][(*maze).start.col] == '0') {
-          (*maze).map[(*maze).start.row][(*maze).start.col] = '3';
-        } else {
+        if ((*maze).map[(*maze).start.row][(*maze).start.col] != '0') {
           printf("start point occupied, re-enter\n");
           goto mazeStartInsertWrong;
         }
@@ -114,9 +111,7 @@ void initMaze(mazeType * maze, pathStackType ** pathStack, bool ifInput) {
           printf("Input out of range, re-enter\n");
           goto mazeEndColInsertWrong;
         }
-        if ((*maze).map[(*maze).end.row][(*maze).end.col] == '0') {
-          (*maze).map[(*maze).end.row][(*maze).end.col] = '4';
-        } else {
+        if ((*maze).map[(*maze).end.row][(*maze).end.col] != '0') {
           printf("end point occupied, re-enter\n");
           goto mazeEndInsertWrong;
         }
@@ -180,26 +175,26 @@ void showMaze(mazeType * maze) {
 int mazePath(mazeType * maze, pathStackType ** pathStack) {
   int pathNum = 0;
   int top = 0;
-  int row, col, dir, find;
-  (*pathStack)[top].p.row = 1;
-  (*pathStack)[top].p.col = 1;
+  (*pathStack)[top].p.row = (*maze).start.row;
+  (*pathStack)[top].p.col = (*maze).start.col;
   (*pathStack)[top].dir = -1;
-  (*maze).map[1][1] = '2';
+  (*maze).map[(*maze).start.row][(*maze).start.col] = '2';
+  int row, col, dir, find;
   while (top > -1) {
     row = (*pathStack)[top].p.row;
     col = (*pathStack)[top].p.col;
     dir = (*pathStack)[top].dir;
-    if (row==8 && col==8) {
-      printf("%i:\n", pathNum+1);
+    if ((*pathStack)[top].p.row == (*maze).end.row && (*pathStack)[top].p.col == (*maze).end.col) {
+      printf("path%i:\n", pathNum + 1);
       pathNum++;
       showMaze(maze);
       (*maze).map[(*pathStack)[top].p.row][(*pathStack)[top].p.col]='0';
       top--;
-      row=(*pathStack)[top].p.row;
-      col=(*pathStack)[top].p.col;
-      dir=(*pathStack)[top].dir;
+      row = (*pathStack)[top].p.row;
+      col = (*pathStack)[top].p.col;
+      dir = (*pathStack)[top].dir;
     }
-    find=0;
+    find = 0;
     while (dir < 4 && find == 0) {
       dir++;
       switch (dir) {
@@ -225,12 +220,12 @@ int mazePath(mazeType * maze, pathStackType ** pathStack) {
       }
     }
     if (find == 1) {
-            (*pathStack)[top].dir = dir;
-            top++;
-            (*pathStack)[top].p.row = row;
-            (*pathStack)[top].p.col = col;
-            (*pathStack)[top].dir = -1;
-            (*maze).map[row][col] = '2';
+      (*pathStack)[top].dir = dir;
+      top++;
+      (*pathStack)[top].p.row = row;
+      (*pathStack)[top].p.col = col;
+      (*pathStack)[top].dir = -1;
+      (*maze).map[row][col] = '2';
     } else {
       (*maze).map[(*pathStack)[top].p.row][(*pathStack)[top].p.col] = '0';
       top--;
