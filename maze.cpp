@@ -186,7 +186,7 @@ int mazePath(mazeType * maze, pathStackType ** pathStack) {
     bool find = false;
     int row = (*pathStack)[top].p.row, col = (*pathStack)[top].p.col, dir = (*pathStack)[top].dir;
 
-    /* to the end point */
+    /* meet the end point */
     if ((*pathStack)[top].p.row == (*maze).end.row && (*pathStack)[top].p.col == (*maze).end.col) {
       printf("path%i:\n", pathNum + 1);
       pathNum++;
