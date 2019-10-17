@@ -34,11 +34,11 @@ void initMaze(mazeType * maze, pathStackType ** pathStack, bool ifInput) {
     scanf("%i", &((*maze).row));
     printf("Insert number of columns:");
     scanf("%i", &((*maze).col));
-    printf("Please Insert %i chars\n\"#\" or the number \"1\" means a wall in the maze\na blank or the number\"0\" means a space in the maze\nother chars will be ignored:\n", row*col);
-    if (((*maze).row*(*maze).col) > mapMax) {
-      printf("the map is too big\n");
+    if (((*maze).row*(*maze).col) >= mapMax) {
+      printf("the map is too big(<=10000)\n");
       exit(0);
     }
+    printf("Please Insert %i chars\n\"#\" or the number \"1\" means a wall in the maze\na blank or the number\"0\" means a space in the maze\nother chars will be ignored:\n", row*col);
     (*maze).map = (char**)malloc(sizeof(char)*(*maze).row);;
     for (int i = 0; i < (*maze).row; i++) {
       (*maze).map[i] = (char*)malloc(sizeof(char)*(*maze).col);
@@ -175,15 +175,18 @@ void showMaze(mazeType * maze) {
 int mazePath(mazeType * maze, pathStackType ** pathStack) {
   int pathNum = 0;
   int top = 0;
+
+  /* the first step*/
   (*pathStack)[top].p.row = (*maze).start.row;
   (*pathStack)[top].p.col = (*maze).start.col;
   (*pathStack)[top].dir = -1;
   (*maze).map[(*maze).start.row][(*maze).start.col] = '2';
-  int row, col, dir, find;
+
   while (top > -1) {
-    row = (*pathStack)[top].p.row;
-    col = (*pathStack)[top].p.col;
-    dir = (*pathStack)[top].dir;
+    bool find = false;
+    int row = (*pathStack)[top].p.row, col = (*pathStack)[top].p.col, dir = (*pathStack)[top].dir;
+
+    /* to the end point */
     if ((*pathStack)[top].p.row == (*maze).end.row && (*pathStack)[top].p.col == (*maze).end.col) {
       printf("path%i:\n", pathNum + 1);
       pathNum++;
@@ -194,8 +197,8 @@ int mazePath(mazeType * maze, pathStackType ** pathStack) {
       col = (*pathStack)[top].p.col;
       dir = (*pathStack)[top].dir;
     }
-    find = 0;
-    while (dir < 4 && find == 0) {
+
+    while (dir < 4 && (!find)) {
       dir++;
       switch (dir) {
         case 0:
@@ -216,10 +219,10 @@ int mazePath(mazeType * maze, pathStackType ** pathStack) {
         break;
       }
       if ((*maze).map[row][col] == '0') {
-        find = 1;
+        find = true;
       }
     }
-    if (find == 1) {
+    if (find) {
       (*pathStack)[top].dir = dir;
       top++;
       (*pathStack)[top].p.row = row;
@@ -231,6 +234,7 @@ int mazePath(mazeType * maze, pathStackType ** pathStack) {
       top--;
     }
   }
+
   return pathNum;
 }
 
